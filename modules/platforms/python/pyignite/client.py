@@ -43,6 +43,8 @@ the local (class-wise) registry for Ignite Complex objects.
 from collections import defaultdict, OrderedDict
 from typing import Iterable, Type, Union
 
+from pyignite.cursor import Cursor
+
 from .api.binary import get_binary_type, put_binary_type
 from .api.cache_config import cache_get_names
 from .api.sql import sql_fields, sql_fields_cursor_get_page
@@ -404,3 +406,16 @@ class Client(Connection):
             raise SQLError(result.message)
 
         return generate_result(result.value)
+        
+    # DBAPI methods
+    
+    def commit(self):
+        # no-op. thin-client doesn't do transactions yet.
+        pass
+    
+    def rollback(self):
+        # no-op. thin-client doesn't do transactions yet.
+        pass
+
+    def cursor(self):
+	    return Cursor(self)

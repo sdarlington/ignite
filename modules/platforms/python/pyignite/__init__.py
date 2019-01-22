@@ -15,3 +15,18 @@
 
 from pyignite.client import Client
 from pyignite.binary import GenericObjectMeta
+
+# DBAPI constants/methods
+threadsafety = 1
+apilevel = "2.0"
+paramstyle = "qmark"
+
+def Connect(*args, **kwargs):
+  """Factory function for connections.Connection."""
+  client = Client()
+  client.connect(*args)
+  return client
+  
+connect = Connection = Connect
+
+__all__ = [ 'Connect' ]
