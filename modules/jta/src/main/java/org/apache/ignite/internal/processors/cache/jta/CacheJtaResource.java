@@ -16,6 +16,7 @@
 
 package org.apache.ignite.internal.processors.cache.jta;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.cache.CacheException;
 import javax.transaction.Status;
@@ -39,7 +40,7 @@ import static org.apache.ignite.transactions.TransactionState.ROLLED_BACK;
 /**
  * Cache {@link XAResource} and {@link Synchronization} implementation.
  */
-final class CacheJtaResource implements XAResource, Synchronization {
+public final class CacheJtaResource implements XAResource, Synchronization {
     /** Logger reference. */
     private static final AtomicReference<IgniteLogger> logRef = new AtomicReference<>();
 
@@ -309,10 +310,17 @@ final class CacheJtaResource implements XAResource, Synchronization {
      *
      * @return {@code true} if jta was already committed or rolled back.
      */
-    boolean isFinished() {
+    public boolean isFinished() {
         TransactionState state = cacheTx.state();
 
         return state == COMMITTED || state == ROLLED_BACK;
+    }
+
+    /**
+     *
+     */
+    public UUID nodeId() {
+        return ctx.localNodeId();
     }
 
     /**
